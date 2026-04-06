@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 
 const codeLines = [
   { text: 'const developer = {', color: '#00f5ff' },
-  { text: '  name: "Alex Dev",', color: 'rgba(255,255,255,0.8)' },
+  { text: '  name: "Shubham Patel",', color: 'rgba(255,255,255,0.8)' },
   { text: '  status: "Student & Developer",', color: 'rgba(255,255,255,0.8)' },
-  { text: '  passion: ["coding", "design", "AI"],', color: '#00ff88' },
+  { text: '  passion: ["AI", "design", "Data Analysis"],', color: '#00ff88' },
   { text: '  education: "CS Degree (In Progress)",', color: 'rgba(255,255,255,0.8)' },
   { text: '  openToWork: true,', color: '#bf00ff' },
-  { text: '  coffee: Infinity,', color: '#ff6b35' },
+  { text: '  Infinite while debugging ☕,', color: '#ff6b35' },
   { text: '}', color: '#00f5ff' },
 ]
 
@@ -83,9 +83,11 @@ export default function AboutSection() {
             }}
           >
             <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
-              I&apos;m a passionate software development student on a mission to build
-              the future of the web. I love crafting experiences that blend
-              technical excellence with creative vision.
+             <p>
+              I'm Shubham Patel, a Computer Science student passionate about
+              AI, blockchain analysis, and building modern web applications.
+              I enjoy solving real-world problems using data and scalable systems.
+            </p>
             </p>
             <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
               From 3D web experiences to intelligent backend systems, I thrive
