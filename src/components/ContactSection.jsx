@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 const socialLinks = [
   { name: 'GitHub', icon: '⑂', color: '#f0f6fc', href: '#' },
@@ -13,6 +14,7 @@ export default function ContactSection() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
+  const [error, setError] = useState(null)
   const [focused, setFocused] = useState(null)
 
   useEffect(() => {
@@ -24,15 +26,31 @@ export default function ContactSection() {
     return () => observer.disconnect()
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSending(true)
-    setTimeout(() => {
-      setSending(false)
-      setSent(true)
-      setForm({ name: '', email: '', message: '' })
-      setTimeout(() => setSent(false), 4000)
-    }, 2000)
+    setError(null)
+
+    if (isSupabaseConfigured) {
+      const { error: dbError } = await supabase
+        .from('contact_messages')
+        .insert([{ name: form.name, email: form.email, message: form.message }])
+
+      if (dbError) {
+        console.error('[Supabase] Insert error:', dbError)
+        setError('Something went wrong. Please try again.')
+        setSending(false)
+        return
+      }
+    } else {
+      // Simulate delay when Supabase not yet configured
+      await new Promise((r) => setTimeout(r, 1200))
+    }
+
+    setSending(false)
+    setSent(true)
+    setForm({ name: '', email: '', message: '' })
+    setTimeout(() => setSent(false), 5000)
   }
 
   return (
@@ -44,9 +62,7 @@ export default function ContactSection() {
       />
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(191,0,255,0.05) 0%, transparent 70%)',
-        }}
+        style={{ background: 'radial-gradient(circle, rgba(191,0,255,0.05) 0%, transparent 70%)' }}
       />
 
       <div className="max-w-7xl mx-auto px-6">
@@ -69,6 +85,27 @@ export default function ContactSection() {
             className="w-24 h-0.5 mx-auto mt-4 rounded-full"
             style={{ background: 'linear-gradient(90deg, transparent, #bf00ff, transparent)' }}
           />
+
+          {/* Supabase status badge */}
+          <div className="mt-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
+            style={{
+              background: isSupabaseConfigured ? 'rgba(0,255,136,0.07)' : 'rgba(255,204,0,0.07)',
+              border: `1px solid ${isSupabaseConfigured ? 'rgba(0,255,136,0.3)' : 'rgba(255,204,0,0.3)'}`,
+            }}
+          >
+            <div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{
+                background: isSupabaseConfigured ? '#00ff88' : '#ffcc00',
+                boxShadow: `0 0 6px ${isSupabaseConfigured ? '#00ff88' : '#ffcc00'}`,
+              }}
+            />
+            <span className="font-fira text-xs"
+              style={{ color: isSupabaseConfigured ? '#00ff88' : '#ffcc00' }}
+            >
+              {isSupabaseConfigured ? 'Supabase connected — messages are saved to DB' : 'Supabase not configured — add keys to .env.local'}
+            </span>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-16">
@@ -112,19 +149,12 @@ export default function ContactSection() {
                 <div
                   key={label}
                   className="flex items-center gap-4 p-4 rounded-xl"
-                  style={{
-                    background: `${color}08`,
-                    border: `1px solid ${color}20`,
-                  }}
+                  style={{ background: `${color}08`, border: `1px solid ${color}20` }}
                 >
                   <span className="text-xl">{icon}</span>
                   <div>
-                    <p className="font-fira text-xs" style={{ color: `${color}80` }}>
-                      {label}
-                    </p>
-                    <p className="font-medium text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                      {value}
-                    </p>
+                    <p className="font-fira text-xs" style={{ color: `${color}80` }}>{label}</p>
+                    <p className="font-medium text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{value}</p>
                   </div>
                 </div>
               ))}
@@ -197,7 +227,9 @@ export default function ContactSection() {
                     Message Sent!
                   </h3>
                   <p className="font-fira text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                    I&apos;ll get back to you soon.
+                    {isSupabaseConfigured
+                      ? 'Your message was saved to the database.'
+                      : "I'll get back to you soon."}
                   </p>
                 </div>
               ) : (
@@ -257,6 +289,15 @@ export default function ContactSection() {
                     />
                   </div>
 
+                  {/* Error message */}
+                  {error && (
+                    <p className="font-fira text-xs text-center py-2 px-4 rounded-lg"
+                      style={{ color: '#ff3e7a', background: 'rgba(255,62,122,0.08)', border: '1px solid rgba(255,62,122,0.2)' }}
+                    >
+                      {error}
+                    </p>
+                  )}
+
                   <button
                     type="submit"
                     disabled={sending}
@@ -270,16 +311,14 @@ export default function ContactSection() {
                   >
                     <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(0,245,255,0.3), rgba(191,0,255,0.3))',
-                      }}
+                      style={{ background: 'linear-gradient(135deg, rgba(0,245,255,0.3), rgba(191,0,255,0.3))' }}
                     />
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       {sending ? (
                         <>
                           <div
-                            className="w-4 h-4 rounded-full border-2 border-t-transparent animate-spin"
-                            style={{ borderColor: '#00f5ff', borderTopColor: 'transparent' }}
+                            className="w-4 h-4 rounded-full border-2 animate-spin"
+                            style={{ borderColor: 'rgba(0,245,255,0.3)', borderTopColor: '#00f5ff' }}
                           />
                           Sending...
                         </>
@@ -310,7 +349,7 @@ export default function ContactSection() {
             </span>
           </div>
           <p className="font-fira text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
-            Built with React + Three.js + Love ♥ &nbsp;|&nbsp; © 2026 Alex Dev
+            Built with React + Three.js + Supabase ♥ &nbsp;|&nbsp; © 2026 Alex Dev
           </p>
         </div>
       </div>
