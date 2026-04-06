@@ -5,7 +5,7 @@ const socialLinks = [
   { name: 'GitHub', icon: '⑂', color: '#f0f6fc', href: '#' },
   { name: 'LinkedIn', icon: 'in', color: '#0077b5', href: '#' },
   { name: 'Twitter', icon: '𝕏', color: '#1d9bf0', href: '#' },
-  { name: 'Email', icon: '@', color: '#00f5ff', href: 'mailto:alex@dev.com' },
+  { name: 'Email', icon: '@', color: '#00f5ff', href: 'mailto:shubhampatel.200133.sp@gmail.com' },
 ]
 
 export default function ContactSection() {
@@ -142,7 +142,7 @@ export default function ContactSection() {
             {/* Info cards */}
             <div className="space-y-4">
               {[
-                { label: 'Location', value: 'San Francisco, CA', icon: '📍', color: '#00f5ff' },
+                { label: 'Location', value: 'Ahmedabad0, Gujarat', icon: '📍', color: '#00f5ff' },
                 { label: 'Availability', value: 'Available from June 2026', icon: '📅', color: '#00ff88' },
                 { label: 'Response', value: 'Usually within 24 hours', icon: '⚡', color: '#bf00ff' },
               ].map(({ label, value, icon, color }) => (
@@ -349,7 +349,7 @@ export default function ContactSection() {
             </span>
           </div>
           <p className="font-fira text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
-            Built with React + Three.js + Supabase ♥ &nbsp;|&nbsp; © 2026 Alex Dev
+            Built with React + Three.js + Supabase ♥ &nbsp;|&nbsp; © 2026 shubham Patel
           </p>
         </div>
       </div>
