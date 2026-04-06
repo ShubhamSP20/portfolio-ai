@@ -5,7 +5,7 @@ const roles = [
   'Software Developer',
   'Full Stack Engineer',
   'UI/UX Enthusiast',
-  '3D Web Creator',
+  'Data Analyst',
   'Problem Solver',
 ]
 
@@ -117,7 +117,7 @@ export default function HeroSection() {
                   textShadow: 'none',
                 }}
               >
-                Alex Dev
+                Shubham Patel
               </span>
             </h1>
           </div>
@@ -186,8 +186,8 @@ export default function HeroSection() {
           {/* Stats */}
           <div className="flex gap-8 pt-4">
             {[
-              { num: '15+', label: 'Projects' },
-              { num: '3+', label: 'Years Coding' },
+              { num: '5+', label: 'Projects' },
+              { num: '1+', label: 'Years Coding' },
               { num: '10+', label: 'Technologies' },
             ].map(({ num, label }) => (
               <div key={label} className="text-center">
