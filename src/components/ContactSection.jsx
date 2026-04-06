@@ -142,7 +142,7 @@ export default function ContactSection() {
             {/* Info cards */}
             <div className="space-y-4">
               {[
-                { label: 'Location', value: 'Ahmedabad0, Gujarat', icon: '📍', color: '#00f5ff' },
+                { label: 'Location', value: 'Ahmedabad, Gujarat', icon: '📍', color: '#00f5ff' },
                 { label: 'Availability', value: 'Available from June 2026', icon: '📅', color: '#00ff88' },
                 { label: 'Response', value: 'Usually within 24 hours', icon: '⚡', color: '#bf00ff' },
               ].map(({ label, value, icon, color }) => (
